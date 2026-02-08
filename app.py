@@ -12,9 +12,9 @@ st.write("Enter client details to predict if they will subscribe to a term depos
 # User Inputs
 job = st.selectbox('Job', ['Select Job', 'admin', 'student', 'self-employed', 'unemployed'])
 marital = st.selectbox('Marital Status', ['Select Marital Status', 'married', 'single', 'divorced'])
-age = st.number_input('Age', min_value=18, max_value=100, value=30)
+age = st.number_input('Age', min_value=18, max_value=100, value=18, step=1)
 education = st.selectbox('Education', ['Select Education', 'primary', 'secondary', 'tertiary', 'unknown'])
-balance = st.number_input('Balance', value=1000)
+balance = st.number_input('Balance', value=0, step=100)
 
 # Results Placeholder
 result_placeholder = st.empty()
@@ -22,7 +22,7 @@ result_placeholder = st.empty()
 # Predict Buttons
 if st.button('Predict'):
     # Validate inputs
-    if job.startswith('Select') or marital.startswith('Select') or education.startswith('Select') or age == 0:
+    if job.startswith('Select') or marital.startswith('Select') or education.startswith('Select'):
         result_placeholder.warning("Please fill all fields before predicting.")
     else:
         # Create input DataFrame
@@ -55,5 +55,8 @@ if st.button('Predict'):
         prediction = model.predict(input_encoded)[0]
         probability = model.predict_proba(input_encoded)[0][1]
 
-        st.write(f"Prediction: {prediction}")
-        st.write(f"Probability of Subscribing: {probability: .2%}")
+        # Display Result
+        result_placeholder.success(f"Prediction: {prediction}")
+        result_placeholder.info(f"Probability of Subscribing: {probability: .2%}")
+else:
+        result_placeholder.info("Prediction will appear after clicking 'Predict'.")
