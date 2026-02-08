@@ -4,6 +4,7 @@ import joblib
 
 # Load the trained model
 model = joblib.load('rf_model.pkl')
+model_columns = joblib.load('model_columns.pkl')
 
 st.title("Bank Marketing Prediction")
 st.write("Enter client details to predict if they will subscribe to a term deposit.")
