@@ -9,12 +9,24 @@ model_columns = joblib.load('model_columns.pkl')
 st.title("Bank Marketing Prediction")
 st.write("Enter client details to predict if they will subscribe to a term deposit.")
 
+# Session State Defaults
+if 'job' not in st.session_state:
+    st.session_state.job = 'Select Job'
+if 'marital' not in st.session_state:
+    st.session_state.marital = 'Select Marital Status'
+if 'age' not in st.session_state:
+    st.session_state.age = 18
+if 'education' not in st.session_state:
+    st.session_state.education = 'Select Education'
+if 'balance' not in st.session_state:
+    st.session_state.balance = 0
+
 # User Inputs
-job = st.selectbox('Job', ['Select Job', 'admin', 'student', 'self-employed', 'unemployed'])
-marital = st.selectbox('Marital Status', ['Select Marital Status', 'married', 'single', 'divorced'])
-age = st.number_input('Age', min_value=18, max_value=100, value=18, step=1)
-education = st.selectbox('Education', ['Select Education', 'primary', 'secondary', 'tertiary', 'unknown'])
-balance = st.number_input('Balance', value=0, step=100)
+job = st.selectbox('Job', ['Select Job', 'admin', 'student', 'self-employed', 'unemployed'], key='job')
+marital = st.selectbox('Marital Status', ['Select Marital Status', 'married', 'single', 'divorced'], key='marital')
+age = st.number_input('Age', min_value=18, max_value=100, value=st.session_state.age, key='age')
+education = st.selectbox('Education', ['Select Education', 'primary', 'secondary', 'tertiary', 'unknown'], key='education')
+balance = st.number_input('Balance', value=st.session_state.balance, step=100, key='balance')
 
 # Results Placeholder
 result_placeholder = st.empty()
@@ -58,5 +70,13 @@ if st.button('Predict'):
         # Display Result
         result_placeholder.success(f"Prediction: {prediction}")
         result_placeholder.info(f"Probability of Subscribing: {probability: .2%}")
-else:
-        result_placeholder.info("Prediction will appear after clicking 'Predict'.")
+
+        # Reset Button
+        if st.button('Reset'):
+            st.session_state.job = 'Select Job'
+            st.session_state.marital = 'Select Marital Status'
+            st.session_state.age = 18
+            st.session_state.education = 'Select Education'
+            st.session_state.balance = 0
+            result_placeholder.empty() # Clear Prediction Output
+            st.experimental_rerun() # Refresh App with defaults
