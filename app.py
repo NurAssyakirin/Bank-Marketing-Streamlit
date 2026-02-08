@@ -10,23 +10,20 @@ st.title("Bank Marketing Prediction")
 st.write("Enter client details to predict if they will subscribe to a term deposit.")
 
 # User Inputs
-job = st.selectbox('Job', ['admin', 'student', 'self-employed', 'unemployed'])
-marital = st.selectbox('Marital Status', ['married', 'single', 'divorced'])
+job = st.selectbox('Job', ['Select Job', 'admin', 'student', 'self-employed', 'unemployed'])
+marital = st.selectbox('Marital Status', ['Select Marital Status', 'married', 'single', 'divorced'])
 age = st.number_input('Age', min_value=18, max_value=100, value=30)
-education = st.selectbox('Education', ['primary', 'secondary', 'tertiary', 'unknown'])
+education = st.selectbox('Education', ['Select Education', 'primary', 'secondary', 'tertiary', 'unknown'])
 balance = st.number_input('Balance', value=1000)
 
-# Input Dataframe
-input_data = pd.DataFrame({
-    "age": [age],
-    "job": [job],
-    "marital": [marital],
-    "education": [education],
-    "balance": [balance],
-})
+# Results Placeholder
+result_placeholder = st.empty()
 
 # Predict Buttons
 if st.button('Predict'):
+    # Validate Inputs
+    if job.startswith('Select') or marital.startswith('Select') or education.startswith('Select') or age == 0:
+        result_placeholder.warning("Please fill all fields before predicting.")
     # create input DataFrame with categorical columns
     input_data = pd.DataFrame([{
         'age': age,
