@@ -27,7 +27,35 @@ input_data = pd.DataFrame({
 
 # Predict Buttons
 if st.button('Predict'):
-    prediction = model.predict(input_data)[0] # Yes or No
-    probability = model.predict_proba(input_data)[0][1] # Probability of Subscribing
-    st.write(f"Prediction: {prediction}")
-    st.write(f"Probability of Subscribing: {probability: .2%}")
+    # create input DataFrame with categorical columns
+    input_data = pd.DataFrame([{
+        'age': age,
+        'job': job,
+        'marital': marital,
+        'education': education,
+        'balance': balance,
+        'default': 'no',
+        'housing': 'no',
+        'loan': 'no',
+        'contact': 'cellular',
+        'month': 'may',
+        'day_of_week': 'mon',
+        'poutcome': 'unknown'
+    }])
+
+# One Hot Encoding User Inputs
+input_encoded = pd.get_dummies(input_data)
+
+# Missing Columns that exists in the Training Data 
+for col in model_columns:
+    if col not in input_encoded.columns:
+        input_encoded[col] = 0
+
+input_encoded = input_encoded[model_columns]
+
+# Make Prediction
+prediction = model.predict(input_encoded)[0]
+probability = model.predict_proba(input_encoded)[0][1]
+
+st.write(f"Prediction: {prediction}")
+st.write(f"Probability of Subscribing: {probability: .2%}")
