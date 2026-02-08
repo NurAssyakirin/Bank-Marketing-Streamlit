@@ -21,38 +21,39 @@ result_placeholder = st.empty()
 
 # Predict Buttons
 if st.button('Predict'):
-    # Validate Inputs
+    # Validate inputs
     if job.startswith('Select') or marital.startswith('Select') or education.startswith('Select') or age == 0:
         result_placeholder.warning("Please fill all fields before predicting.")
-    # create input DataFrame with categorical columns
-    input_data = pd.DataFrame([{
-        'age': age,
-        'job': job,
-        'marital': marital,
-        'education': education,
-        'balance': balance,
-        'default': 'no',
-        'housing': 'no',
-        'loan': 'no',
-        'contact': 'cellular',
-        'month': 'may',
-        'day_of_week': 'mon',
-        'poutcome': 'unknown'
-    }])
+    else:
+        # Create input DataFrame
+        input_data = pd.DataFrame([{
+            'age': age,
+            'job': job,
+            'marital': marital,
+            'education': education,
+            'balance': balance,
+            'default': 'no',
+            'housing': 'no',
+            'loan': 'no',
+            'contact': 'cellular',
+            'month': 'may',
+            'day_of_week': 'mon',
+            'poutcome': 'unknown'
+        }])
 
-# One Hot Encoding User Inputs
-input_encoded = pd.get_dummies(input_data)
+        # One Hot Encoding User Inputs
+        input_encoded = pd.get_dummies(input_data)
 
-# Missing Columns that exists in the Training Data 
-for col in model_columns:
-    if col not in input_encoded.columns:
-        input_encoded[col] = 0
+        # Missing Columns that exists in the Training Data 
+        for col in model_columns:
+            if col not in input_encoded.columns:
+                input_encoded[col] = 0
 
-input_encoded = input_encoded[model_columns]
+        input_encoded = input_encoded[model_columns]
 
-# Make Prediction
-prediction = model.predict(input_encoded)[0]
-probability = model.predict_proba(input_encoded)[0][1]
+        # Make Prediction
+        prediction = model.predict(input_encoded)[0]
+        probability = model.predict_proba(input_encoded)[0][1]
 
-st.write(f"Prediction: {prediction}")
-st.write(f"Probability of Subscribing: {probability: .2%}")
+        st.write(f"Prediction: {prediction}")
+        st.write(f"Probability of Subscribing: {probability: .2%}")
