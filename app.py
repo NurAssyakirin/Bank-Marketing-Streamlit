@@ -1,11 +1,39 @@
 import streamlit as st
 import pandas as pd
 import joblib
+import base64
+
+def set_background_image(image_file):
+    with open(image_file, "rb") as f:
+        encoded = base64.b64encode(f.read()).decode()
+
+        st.markdown(
+            f"""
+            <style>
+            .stApp {{
+            background-image: url("data:image/jpg;base64, {encoded}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            }}
+
+            .block-container {{
+            background-color: rgba(255, 255, 255, 0.88);
+            padding: 2rem;
+            border-radius: 12px;
+            }}
+            <style>
+            """,
+            unsafe_allow_html=True
+        )
+
+        set_background_image("BankBG.jpg")
 
 # Load the trained model
 model = joblib.load('rf_model.pkl')
 model_columns = joblib.load('model_columns.pkl')
 
+# App Title
 st.title("Bank Marketing Prediction")
 st.write("Enter client details to predict if they will subscribe to a term deposit.")
 
@@ -79,4 +107,4 @@ if st.button('Predict'):
             st.session_state.education = 'Select Education'
             st.session_state.balance = 0
             result_placeholder.empty() # Clear Prediction Output
-            st.experimental_rerun() # Refresh App with defaults
+            st.experimental_rerun() # Refresh App with defaultsconda conda ac
