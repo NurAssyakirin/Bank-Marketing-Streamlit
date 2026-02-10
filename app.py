@@ -36,6 +36,28 @@ def set_bg_image():
 
 set_bg_image()
 
+st.markdown(
+    """
+    <style>
+    /* Titles */
+    h1, h2, h3 {
+        color: black !important;
+    }
+
+    /* Normal text */
+    .stMarkdown, .stMarkdown p {
+        color: black !important;
+    }
+
+    /* Input labels */
+    label {
+        color: black !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # Load the trained model
 model = joblib.load('rf_model.pkl')
 model_columns = joblib.load('model_columns.pkl')
