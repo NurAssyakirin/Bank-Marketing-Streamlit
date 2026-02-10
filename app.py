@@ -5,7 +5,7 @@ import joblib
 import base64
 
 def set_bg_image():
-    image_path = Path("BankBG.jpg")
+    image_path = Path("BankBackground.jpeg")
     if not image_path.exists():
         st.warning("Background image not found")
         return
@@ -16,7 +16,7 @@ def set_bg_image():
         f"""
         <style>
         .stApp {{
-            background: url("data:image/jpg;base64,{encoded}") no-repeat center center fixed;
+            background: url("data:image/jpeg;base64,{encoded}") no-repeat center center fixed;
             background-size: cover;
         }}
 
