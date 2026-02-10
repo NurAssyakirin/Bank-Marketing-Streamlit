@@ -1,33 +1,40 @@
 import streamlit as st
+from pathlib import Path
 import pandas as pd
 import joblib
 import base64
 
-def set_background_image(image_file):
-    with open(image_file, "rb") as f:
-        encoded = base64.b64encode(f.read()).decode()
+def set_bg_image():
+    image_path = Path("BankBG.jpg")
+    if not image_path.exists():
+        st.warning("Background image not found")
+        return
 
-        st.markdown(
-            f"""
-            <style>
-            .stApp {{
-            background-image: url("data:image/jpg;base64, {encoded}");
+    encoded = base64.b64encode(image_path.read_bytes()).decode()
+
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background: url("data:image/jpg;base64,{encoded}") no-repeat center center fixed;
             background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            }}
+        }}
 
-            .block-container {{
-            background-color: rgba(255, 255, 255, 0.88);
+        section[data-testid="stSidebar"] {{
+            background-color: rgba(255, 255, 255, 0.9);
+        }}
+
+        .block-container {{
+            background-color: rgba(255, 255, 255, 0.85);
             padding: 2rem;
             border-radius: 12px;
-            }}
-            <style>
-            """,
-            unsafe_allow_html=True
-        )
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
-        set_background_image("BankBG.jpg")
+set_bg_image()
 
 # Load the trained model
 model = joblib.load('rf_model.pkl')
